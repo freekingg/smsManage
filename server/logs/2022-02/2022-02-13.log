@@ -1,0 +1,12 @@
+2022-02-13 17:34:27,798 DEBUG 28896  --- [DESKTOP-G5KRLUU] - [POST] -> [/cms/user/captcha] from: ::ffff:192.168.0.100 costs: 1ms data:{
+    "param": {},
+    "body": {}
+}
+2022-02-13 17:34:49,111 DEBUG 28896  --- [DESKTOP-G5KRLUU] - [POST] -> [/cms/user/captcha] from: ::ffff:192.168.0.100 costs: 1ms data:{
+    "param": {},
+    "body": {}
+}
+2022-02-13 18:26:36,741 DEBUG 17364  --- [DESKTOP-G5KRLUU] - [POST] -> [/cms/user/captcha] from: ::ffff:192.168.0.100 costs: 3ms data:{
+    "param": {},
+    "body": {}
+}

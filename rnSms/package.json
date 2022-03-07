@@ -1,0 +1,49 @@
+{
+  "name": "rnstar",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web",
+    "eject": "expo eject",
+    "build:android": "cd android && ./gradlew assembleRelease"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "~1.15.0",
+    "@react-navigation/material-bottom-tabs": "^6.0.9",
+    "@react-navigation/native": "^6.0.6",
+    "@react-navigation/native-stack": "^6.2.5",
+    "@sayem314/react-native-keep-awake": "^1.0.4",
+    "@voximplant/react-native-foreground-service": "^2.0.0",
+    "axios": "^0.24.0",
+    "expo": "~44.0.0",
+    "expo-splash-screen": "~0.14.1",
+    "expo-status-bar": "~1.2.0",
+    "native-base": "^3.2.2",
+    "qs": "^6.10.2",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-native": "0.64.3",
+    "react-native-android-sms-listener2": "^0.8.2",
+    "react-native-get-sms-android-v2": "^2.1.0",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-paper": "^4.11.1",
+    "react-native-platform": "^0.11.0",
+    "react-native-restart": "^0.0.24",
+    "react-native-safe-area-context": "3.3.2",
+    "react-native-screens": "^3.10.1",
+    "react-native-svg": "12.1.1",
+    "react-native-web": "0.17.1",
+    "react-redux": "^7.2.6",
+    "redux": "^4.1.2",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.4.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@types/react-native": "~0.64.12",
+    "typescript": "~4.3.5"
+  },
+  "private": true
+}
