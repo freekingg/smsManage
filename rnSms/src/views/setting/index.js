@@ -66,11 +66,6 @@ function SignUpForm({props}) {
           md: '0',
         }}>
         <VStack space="7">
-          <Hidden till="md">
-            <Text fontSize="lg" fontWeight="normal">
-              Sign up to continue!
-            </Text>
-          </Hidden>
           <VStack>
             <VStack space="8">
               <VStack
@@ -80,7 +75,7 @@ function SignUpForm({props}) {
                 }}>
                 <FloatingLabelInput
                   isRequired
-                  label="Email"
+                  label="上报接口"
                   labelColor="#9ca3af"
                   labelBGColor={useColorModeValue('#fff', '#1f2937')}
                   borderRadius="4"
@@ -171,56 +166,6 @@ function SignUpForm({props}) {
                   }}
                 />
               </VStack>
-              <Checkbox
-                alignItems="flex-start"
-                defaultIsChecked
-                value="demo"
-                colorScheme="primary"
-                accessibilityLabel="Remember me">
-                <HStack alignItems="center">
-                  <Text fontSize="sm" color="coolGray.400" pl="2">
-                    I accept the{' '}
-                  </Text>
-                  <Link
-                    _text={{
-                      fontSize: 'sm',
-                      fontWeight: 'semibold',
-                      textDecoration: 'none',
-                    }}
-                    _light={{
-                      _text: {
-                        color: 'primary.900',
-                      },
-                    }}
-                    _dark={{
-                      _text: {
-                        color: 'primary.500',
-                      },
-                    }}>
-                    Terms of Use
-                  </Link>
-                  <Text fontSize="sm"> & </Text>
-
-                  <Link
-                    _text={{
-                      fontSize: 'sm',
-                      fontWeight: 'semibold',
-                      textDecoration: 'none',
-                    }}
-                    _light={{
-                      _text: {
-                        color: 'primary.900',
-                      },
-                    }}
-                    _dark={{
-                      _text: {
-                        color: 'primary.500',
-                      },
-                    }}>
-                    Privacy Policy
-                  </Link>
-                </HStack>
-              </Checkbox>
               {/* Opening Link Tag navigateTo:"OTP" (react/Router) */}
               <Button
                 size="md"
@@ -238,7 +183,7 @@ function SignUpForm({props}) {
                 onPress={() => {
                   props.navigation.navigate('signIn');
                 }}>
-                SIGN UP
+                Submit
               </Button>
               {/* Closing Link Tag */}
               <HStack
@@ -278,61 +223,8 @@ function SignUpForm({props}) {
                   }}></Divider>
               </HStack>
             </VStack>
-            <Center>
-              <HStack space="4">
-                <Pressable>
-                  <IconFacebook />
-                </Pressable>
-                <Pressable>
-                  <IconGoogle />
-                </Pressable>
-              </HStack>
-            </Center>
           </VStack>
         </VStack>
-        <HStack
-          mb="4"
-          space="1"
-          alignItems="center"
-          justifyContent="center"
-          mt={{
-            base: 'auto',
-            md: '8',
-          }}>
-          <Text
-            fontSize="sm"
-            _light={{
-              color: 'coolGray.800',
-            }}
-            _dark={{
-              color: 'coolGray.400',
-            }}>
-            Already have an account?
-          </Text>
-          {/* Opening Link Tag navigateTo:"SignIn" */}
-          <Link
-            _text={{
-              fontSize: 'sm',
-              fontWeight: 'bold',
-              textDecoration: 'none',
-            }}
-            _light={{
-              _text: {
-                color: 'primary.900',
-              },
-            }}
-            _dark={{
-              _text: {
-                color: 'primary.500',
-              },
-            }}
-            onPress={() => {
-              props.navigation.navigate('signIn');
-            }}>
-            Sign in
-          </Link>
-          {/* Closing Link Tag */}
-        </HStack>
       </VStack>
     </KeyboardAwareScrollView>
   );
@@ -396,47 +288,11 @@ export default function SignUp(props) {
                   }
                 />
                 <Text color="coolGray.50" fontSize="lg">
-                  Sign Up
+                  Setting
                 </Text>
               </HStack>
-              <VStack space="2">
-                <Text fontSize="3xl" fontWeight="bold" color="coolGray.50">
-                  Welcome
-                </Text>
-                <Text
-                  fontSize="md"
-                  fontWeight="normal"
-                  _dark={{
-                    color: 'coolGray.400',
-                  }}
-                  _light={{
-                    color: 'primary.300',
-                  }}>
-                  Sign up to continue
-                </Text>
-              </VStack>
+              
             </VStack>
-          </Hidden>
-          <Hidden till="md">
-            <Center
-              flex="1"
-              bg="primary.700"
-              borderTopLeftRadius={{
-                base: '0',
-                md: 'xl',
-              }}
-              borderBottomLeftRadius={{
-                base: '0',
-                md: 'xl',
-              }}>
-              <Image
-                h="24"
-                size="80"
-                alt="NativeBase Startup+ "
-                resizeMode={'contain'}
-                source={require('./components/logo.png')}
-              />
-            </Center>
           </Hidden>
           <SignUpForm props={props} />
         </Stack>

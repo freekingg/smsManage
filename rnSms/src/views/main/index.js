@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { PermissionsAndroid, Platform, View, Alert,NativeModules } from "react-native";
+import {
+  PermissionsAndroid,
+  Platform,
+  View,
+  Alert,
+  NativeModules,
+} from "react-native";
 import {
   Button,
   HStack,
@@ -28,9 +34,9 @@ import {
 } from "react-native-platform";
 import { useKeepAwake } from "@sayem314/react-native-keep-awake";
 import Storage from "../../public/Storage";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import FloatingLabelInput from "./components/FloatingLabelInput";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import SmsListener from "react-native-android-sms-listener2";
 import SmsAndroid from "react-native-get-sms-android-v2";
 import VIForegroundService from "@voximplant/react-native-foreground-service";
@@ -209,19 +215,22 @@ export function SignInForm({ props }) {
         result[permissions.RECEIVE_SMS] === "never_ask_again" ||
         result[permissions.READ_PHONE_STATE] === "never_ask_again"
       ) {
-
-        Alert.alert("Tip", 'Please Go into Settings -> Applications -> APP_NAME -> Permissions and Allow permissions to continue', [
-          {
-            text: "Enter",
-            onPress: async () => {
-              try {
-                await openBackgroundSettings();
-              } catch (e) {
-                console.log("openBackgroundSettings failed: " + e.message);
-              }
+        Alert.alert(
+          "Tip",
+          "Please Go into Settings -> Applications -> APP_NAME -> Permissions and Allow permissions to continue",
+          [
+            {
+              text: "Enter",
+              onPress: async () => {
+                try {
+                  await openBackgroundSettings();
+                } catch (e) {
+                  console.log("openBackgroundSettings failed: " + e.message);
+                }
+              },
             },
-          },
-        ]);
+          ]
+        );
       } else {
         return false;
       }
@@ -272,7 +281,7 @@ export function SignInForm({ props }) {
   }, []);
 
   return (
-    <KeyboardAwareScrollView
+    <Box
       contentContainerStyle={{
         flexGrow: 1,
       }}
@@ -308,35 +317,34 @@ export function SignInForm({ props }) {
         <VStack space="7">
           <VStack>
             <VStack space="3">
-              <VStack
-                space={{
-                  base: "7",
-                  md: "4",
+              <FloatingLabelInput
+                isRequired
+                label="Please fill in the name"
+                labelColor="#9ca3af"
+                labelBGColor={useColorModeValue("#fff", "#1f2937")}
+                borderRadius="4"
+                defaultValue={text}
+                onChangeText={(txt) => {
+                  setText(txt);
+                  Storage.setItem("name", text);
                 }}
-              >
-                <FloatingLabelInput
-                  isRequired
-                  label="Please fill in the name"
-                  labelColor="#9ca3af"
-                  labelBGColor={useColorModeValue("#fff", "#1f2937")}
-                  borderRadius="4"
-                  defaultValue={text}
-                  onChangeText={(txt) => {
-                    setText(txt);
-                    Storage.setItem("name", text);
-                  }}
-                  _text={{
-                    fontSize: "sm",
-                    fontWeight: "medium",
-                  }}
-                  _dark={{
-                    borderColor: "coolGray.700",
-                  }}
-                  _light={{
-                    borderColor: "coolGray.300",
-                  }}
-                />
-              </VStack>
+                _text={{
+                  fontSize: "sm",
+                  fontWeight: "medium",
+                }}
+                _dark={{
+                  borderColor: "coolGray.700",
+                }}
+                _light={{
+                  borderColor: "coolGray.300",
+                }}
+              />
+              {!text ? (
+                <Text style={{ paddingLeft: 8, color: "red" }}>
+                  Please fill in the name
+                </Text>
+              ) : null}
+
               <Button
                 mt="5"
                 size="md"
@@ -425,7 +433,7 @@ export function SignInForm({ props }) {
           </Modal.Content>
         </Modal>
       </VStack>
-    </KeyboardAwareScrollView>
+    </Box>
   );
 }
 export default function SignIn(props) {
@@ -445,11 +453,25 @@ export default function SignIn(props) {
           bg: "coolGray.900",
         }}
       />
+      <Box
+        bg="primary.900"
+        style={{ position: "absolute", right: 20, top: 26, zIndex: 2 }}
+      >
+        <IconButton
+        onPress={()=>{
+          props.navigation.navigate('setting')
+        }}
+          size="sm"
+          variant="solid"
+          bg="primary.900"
+          _icon={{
+            as: MaterialIcons,
+            name: "menu",
+          }}
+        />
+      </Box>
       <Center
         my="auto"
-        _dark={{
-          bg: "coolGray.900",
-        }}
         _light={{
           bg: "primary.900",
         }}
@@ -490,28 +512,6 @@ export default function SignIn(props) {
                 </Text>
               </VStack>
             </VStack>
-          </Hidden>
-          <Hidden till="md">
-            <Center
-              flex="1"
-              bg="primary.700"
-              borderTopLeftRadius={{
-                base: "0",
-                md: "xl",
-              }}
-              borderBottomLeftRadius={{
-                base: "0",
-                md: "xl",
-              }}
-            >
-              <Image
-                h="24"
-                size="80"
-                alt="NativeBase Startup+ "
-                resizeMode={"contain"}
-                source={require("./components/logo.png")}
-              />
-            </Center>
           </Hidden>
           <SignInForm props={props} />
         </Stack>
