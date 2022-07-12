@@ -56,9 +56,10 @@ service.interceptors.response.use(
      * 410 网站维护
      * 403 访问受限
      */
-    if (response.data.code === 0) {
-      return response.data.data;
-    } else {
+
+    if (response.status.toString().charAt(0) === '2') {
+      return response.data
+    }else {
       return Promise.reject(response);
     }
   },

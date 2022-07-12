@@ -17,6 +17,7 @@ import MineScene from "../views/tabbar/MineScene";
 
 import MainInScene from "../views/main";
 import SettingScene from "../views/setting";
+import RecordsScene from "../views/records";
 
 import TestScene from "../views/test/TestScene";
 
@@ -47,6 +48,14 @@ function NavigatorStack() {
           animation:'fade_from_bottom',
         }}
         component={SettingScene}
+      />
+      <Stack.Screen
+        name="records"
+        options={{
+          headerShown: false,
+          animation:'fade_from_bottom',
+        }}
+        component={RecordsScene}
       />
       <Stack.Screen
         name="test"

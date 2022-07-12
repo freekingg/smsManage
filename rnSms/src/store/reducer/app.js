@@ -10,6 +10,10 @@ const User = (state = initialState, action) => {
       return Object.assign({}, newState, {
         base_info: payload,
       });
+    case Types.SET_SMS_INFO:
+      return Object.assign({}, newState, {
+        sms_info: payload,
+      });
 
     default:
   }

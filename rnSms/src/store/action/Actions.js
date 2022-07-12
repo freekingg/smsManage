@@ -39,3 +39,13 @@ export const SET_LOGIND = payload => {
     });
   };
 };
+
+// 设置用户信息
+export const SET_SMS_INFO = payload => {
+  return dispatch => {
+    dispatch({
+      type: Types.SET_SMS_INFO,
+      payload,
+    });
+  };
+};

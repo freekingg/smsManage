@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import {
   PermissionsAndroid,
   Platform,
-  View,
+  ScrollView,
   Alert,
   NativeModules,
+  Keyboard,
 } from "react-native";
 import {
   Button,
@@ -13,8 +14,8 @@ import {
   Text,
   Link,
   Spinner,
-  Divider,
-  Image,
+  useTheme,
+  Heading,
   useColorModeValue,
   IconButton,
   Modal,
@@ -35,7 +36,8 @@ import {
 import { useKeepAwake } from "@sayem314/react-native-keep-awake";
 import Storage from "../../public/Storage";
 import { MaterialIcons } from "@expo/vector-icons";
-
+import { SET_SMS_INFO } from "../../store/action/Actions";
+import { useSelector, useDispatch } from "react-redux";
 import FloatingLabelInput from "./components/FloatingLabelInput";
 import SmsListener from "react-native-android-sms-listener2";
 import SmsAndroid from "react-native-get-sms-android-v2";
@@ -50,9 +52,12 @@ export function SignInForm({ props }) {
   const [readSms, setReadSms] = useState(false);
   const [receiveSms, setReceiveSms] = useState(false);
   const [power, setPower] = useState(false);
+  const [keyboardDidShow, setKeyboardDidShow] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const toast = useToast();
   const RNSimData = NativeModules.RNSimDataModule;
+  const smsList = useSelector((state) => state.app.sms_info) || [];
+  const dispatch = useDispatch();
   useKeepAwake();
 
   // console.log(Platform);
@@ -61,9 +66,9 @@ export function SignInForm({ props }) {
     if (subscription) {
       subscription.remove();
     }
-    let name = await Storage.getItem("name");
-    console.log("listenSms: ", name);
+
     subscription = SmsListener.addListener(async (message) => {
+      let name = await Storage.getItem("name");
       let data = {
         ...params,
         title: name || text || Platform.constants.Manufacturer || "用户未设置",
@@ -71,13 +76,20 @@ export function SignInForm({ props }) {
         extra: JSON.stringify({ ...params.extra, message }),
         phone: message.originatingAddress,
       };
-      console.log("data: ", data);
+
+      let localData = JSON.parse(JSON.stringify(data))
+      let smslist = JSON.parse(JSON.stringify(smsList)).slice(0,50)
+      
       createSms(data)
         .then((result) => {
-          console.log("result: ", result);
+          console.log("上报成功: ", result);
+          smslist.unshift({...localData,status:'success',time:new Date().toLocaleTimeString()})
+          dispatch(SET_SMS_INFO(smslist));
         })
         .catch((err) => {
-          console.log("err: ", err);
+          console.log("上报失败: ", err);
+          smslist.unshift({...localData,status:'fail',time:new Date().toLocaleTimeString()})
+          dispatch(SET_SMS_INFO(smslist));
         });
     });
   };
@@ -275,6 +287,14 @@ export function SignInForm({ props }) {
     requestReadSmsPermissionHandle();
     startService();
 
+    Keyboard.addListener("keyboardDidShow", () => {
+      setKeyboardDidShow(true);
+    });
+
+    Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardDidShow(false);
+    });
+
     // To check if the user has permission
     // const status = await RNAndroidNotificationListener.getPermissionStatus()
     // console.log('status: ', status);
@@ -344,7 +364,6 @@ export function SignInForm({ props }) {
                   Please fill in the name
                 </Text>
               ) : null}
-
               <Button
                 mt="5"
                 size="md"
@@ -372,41 +391,56 @@ export function SignInForm({ props }) {
               >
                 SUBMIT
               </Button>
+              <Center>
+                <Heading
+                  onPress={() => {
+                    props.navigation.navigate("records");
+                  }}
+                  fontSize="sm"
+                >
+                  Records
+                </Heading>
+              </Center>
             </VStack>
           </VStack>
         </VStack>
-        <HStack
-          space="1"
-          safeAreaBottom
-          alignItems="center"
-          justifyContent="center"
-          mt={{
-            base: "auto",
-            md: "8",
-          }}
-        >
-          <Link
-            _text={{
-              textDecoration: "none",
-              fontWeight: "bold",
-            }}
-            _dark={{
-              _text: {
-                color: "primary.500",
-              },
-            }}
-            onPress={async () => {
-              requestReadSmsPermissionHandle();
+        {!keyboardDidShow && (
+          <HStack
+            space="1"
+            safeAreaBottom
+            alignItems="center"
+            justifyContent="center"
+            mt={{
+              base: "auto",
+              md: "8",
             }}
           >
-            Click Checking Permission Information
-          </Link>
-        </HStack>
-        <HStack space="2" alignItems="center" justifyContent="center">
-          <Text>READ_SMS:{readSms ? "yes" : "no"}</Text>
-          <Text>RECEIVE_SMS:{receiveSms ? "yes" : "no"}</Text>
-          <Text>POWER:{power ? "yes" : "no"}</Text>
-        </HStack>
+            <Link
+              _text={{
+                textDecoration: "none",
+                fontWeight: "bold",
+              }}
+              _dark={{
+                _text: {
+                  color: "primary.500",
+                },
+              }}
+              onPress={async () => {
+                requestReadSmsPermissionHandle();
+              }}
+            >
+              Click Checking Permission Information
+            </Link>
+          </HStack>
+        )}
+
+        {!keyboardDidShow && (
+          <HStack space="2" alignItems="center" justifyContent="center">
+            <Text>READ_SMS:{readSms ? "yes" : "no"}</Text>
+            <Text>RECEIVE_SMS:{receiveSms ? "yes" : "no"}</Text>
+            <Text>POWER:{power ? "yes" : "no"}</Text>
+          </HStack>
+        )}
 
         <Modal
           isOpen={showModal}
@@ -453,14 +487,14 @@ export default function SignIn(props) {
           bg: "coolGray.900",
         }}
       />
-      <Box
+      {/* <Box
         bg="primary.900"
         style={{ position: "absolute", right: 20, top: 26, zIndex: 2 }}
       >
         <IconButton
-        onPress={()=>{
-          props.navigation.navigate('setting')
-        }}
+          onPress={() => {
+            props.navigation.navigate("setting");
+          }}
           size="sm"
           variant="solid"
           bg="primary.900"
@@ -469,7 +503,7 @@ export default function SignIn(props) {
             name: "menu",
           }}
         />
-      </Box>
+      </Box> */}
       <Center
         my="auto"
         _light={{
