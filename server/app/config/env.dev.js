@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-  port: 5000,
+  port: 5001,
   siteDomain: 'http://localhost:5000',
   debug: true,
   db: {
@@ -9,7 +9,7 @@ module.exports = {
     dialect: 'mysql',
     port: 3306,
     username: 'root',
-    password: '123456',
+    password: '123456789',
     logging: false,
     // timezone: '+08:00',
     dialectOptions: {

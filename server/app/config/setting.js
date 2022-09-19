@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   env = require('./env.dev');
 }
-
+console.log('env',env)
 module.exports = {
   port: env.port,
   siteDomain: env.siteDomain,
